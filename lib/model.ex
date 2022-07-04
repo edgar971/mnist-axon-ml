@@ -26,6 +26,13 @@ defmodule MNIST.Model do
     |> Axon.Loop.run(test_data, params)
   end
 
+  def predict(model, params, data) do
+    model
+    |> Axon.predict(params, data)
+    |> Nx.argmax()
+    |> Nx.to_number()
+  end
+
   def save!(params) do
     content = Nx.serialize(params)
 

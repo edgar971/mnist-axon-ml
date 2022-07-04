@@ -21,6 +21,31 @@ defmodule MNIST.Data do
     |> Nx.equal(Nx.tensor(Enum.to_list(0..9)))
   end
 
+  def get_random_image() do
+    {images, labels} = download_mnist()
+
+    images =
+      images
+      |> transform_images()
+
+    labels =
+      labels
+      |> transform_labels()
+
+    idx = Enum.random(0..Nx.axis_size(images, 0))
+
+    label =
+      labels[idx]
+      |> Nx.argmax()
+      |> Nx.to_number()
+
+    image =
+      images
+      |> Nx.slice_along_axis(idx, 1)
+
+    [image, label]
+  end
+
   def get_train_test_val_dataset(train_split, val_split) do
     {images, labels} = download_mnist()
 

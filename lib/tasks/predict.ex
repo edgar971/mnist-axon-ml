@@ -8,15 +8,14 @@ defmodule Mix.Tasks.Predict do
 
   def run(_) do
     EXLA.set_as_nx_default([:tpu, :cuda, :rocm, :host])
-    {_, test, _} = MNIST.Data.get_train_test_val_dataset(0.8, 0.2)
-
+    [image, label] = MNIST.Data.get_random_image()
     model = MNIST.Model.new({1, 28, 28})
 
     Mix.Shell.IO.info("loading saved model...")
     params = MNIST.Model.load!()
 
-    MNIST.Model.test(model, params, test)
+    prediction = MNIST.Model.predict(model, params, image)
 
-    :ok
+    Mix.Shell.IO.info("Pred: #{prediction}. Label: #{label} \n")
   end
 end
