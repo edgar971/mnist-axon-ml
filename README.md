@@ -1,6 +1,14 @@
 # MNIST
 
-**TODO: Add description**
+## Train Model
+```
+mix train
+```
+
+## Make a prediction
+```
+mix predict --image "/home/edgarpino/dev/mnist_axon/priv/images/7.png"
+```
 
 ## Installation
 
