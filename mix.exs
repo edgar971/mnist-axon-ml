@@ -26,8 +26,7 @@ defmodule MNIST.MixProject do
       {:nx, "~> 0.2.1"},
       {:scidata, "~> 0.1.8"},
       {:image, "~> 0.5.0"},
-      {:plug, "~> 1.13"},
-      {:evision, "~> 0.1.0-dev", github: "cocoa-xu/evision", branch: "main"}
+      {:plug, "~> 1.13"}
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
   end

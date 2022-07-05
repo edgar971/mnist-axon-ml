@@ -31,6 +31,12 @@ defmodule Mix.Tasks.Predict do
 
     prediction = MNIST.Model.predict(model, params, image)
 
-    Mix.Shell.IO.info("Prediction: #{prediction}.\n")
+    IO.ANSI.blink_slow()
+
+    Mix.Shell.IO.info(
+      IO.ANSI.blue_background() <>
+        "Prediction: #{prediction}." <>
+        IO.ANSI.reset()
+    )
   end
 end
