@@ -6,16 +6,31 @@ defmodule Mix.Tasks.Predict do
 
   alias MNIST
 
-  def run(_) do
-    EXLA.set_as_nx_default([:tpu, :cuda, :rocm, :host])
-    [image, label] = MNIST.Data.get_random_image()
-    model = MNIST.Model.new({1, 28, 28})
+  @doc """
+  Example:
+  mix predict --image "/home/path/dev/cool/priv/images/0.png"
+  """
+  def run(args) do
+    {[image: image_path], _} = OptionParser.parse!(args, strict: [image: :string])
 
-    Mix.Shell.IO.info("loading saved model...")
+    {:ok, image} =
+      Image.open!(image_path)
+      |> Image.resize!(28)
+      |> Image.to_colorspace!(:grey16)
+      |> Image.to_nx()
+
+    image =
+      image
+      |> Nx.reduce_min(axes: [2])
+      |> Nx.reshape({1, 28, 28})
+      |> List.wrap()
+      |> Nx.stack()
+
+    model = MNIST.Model.new({1, 28, 28})
     params = MNIST.Model.load!()
 
     prediction = MNIST.Model.predict(model, params, image)
 
-    Mix.Shell.IO.info("Pred: #{prediction}. Label: #{label} \n")
+    Mix.Shell.IO.info("Prediction: #{prediction}.\n")
   end
 end
